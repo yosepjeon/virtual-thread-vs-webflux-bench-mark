@@ -1,0 +1,20 @@
+plugins {
+	id 'java'
+}
+
+group = 'com.yosep'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(24) // 기본값(자바 모듈용)
+	}
+}
+
+subprojects {
+	apply plugin: 'java'
+
+	repositories { mavenCentral() }
+
+	test { useJUnitPlatform() }
+}

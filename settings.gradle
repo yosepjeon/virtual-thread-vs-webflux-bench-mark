@@ -1,0 +1,4 @@
+rootProject.name = 'virtual-thread-vs-webflux-bench-mark'
+
+include 'mvc-server'
+include 'webflux-server'

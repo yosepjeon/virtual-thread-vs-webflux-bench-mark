@@ -1,0 +1,70 @@
+application.name: yosep-reactive-boiler-plate-kotlin-server
+
+server:
+  shutdown: graceful
+  port: 20002
+  logging:
+    access: true
+
+spring:
+  flyway:
+    enabled: true
+    # 마이그레이션 스크립트 위치 (기본값과 동일하지만 명시)
+    locations: classpath:db/migration
+    # JDBC로 접속할 DB 정보 (R2DBC 아님!)
+    url: jdbc:mysql://localhost:3306/virtual-thread-vs-webflux-benchmark?useUnicode=true&characterEncoding=utf8&connectionTimeZone=LOCAL
+    user: myuser
+    password: secret
+    # 선택 항목들
+    baseline-on-migrate: false     # 기존 빈 스키마면 false 권장
+    clean-disabled: false           # 실서버 안전장치 (원하면 false로)
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/virtual-thread-vs-webflux-benchmark?useUnicode=true&characterEncoding=utf8&autoreconnect=true
+    username: myuser
+    password: secret
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    producer:
+      client-id: "YOSEP-MVC-SERVER"
+      retries: 3
+      batch-size: 100
+      compression-type: gzip
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+      acks: 1
+      properties:
+        linger.ms: 50
+    consumer:
+      group-id: "YOSEP-MVC-SERVER"
+      enable-auto-commit: false
+      max-poll-records: 500
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.ByteArrayDeserializer
+      auto-offset-reset: latest
+      properties:
+        spring.json.trusted.packages: '*'
+    listener:
+      concurrency: 1
+      ack-mode: manual_immediate
+      poll-timeout: 3000
+      type: single
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+kafka:
+  topic:
+    test:
+      test-1: yosep-mvc-server-test-1
+
+webclient:
+  connection:
+    timeout: 90000
+  response:
+    timeout: 90000
+  read:
+    timeout: 90000
+  write:
+    timeout: 90000
