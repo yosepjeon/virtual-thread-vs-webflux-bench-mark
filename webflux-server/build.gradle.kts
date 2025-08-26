@@ -17,6 +17,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
     runtimeOnly("com.mysql:mysql-connector-j")
     runtimeOnly("io.asyncer:r2dbc-mysql")
+    implementation("io.r2dbc:r2dbc-pool")
 
     // mongo
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
@@ -33,7 +34,9 @@ dependencies {
 
     // docker
     implementation("org.springframework.boot:spring-boot-docker-compose")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("io.rest-assured:spring-web-test-client")

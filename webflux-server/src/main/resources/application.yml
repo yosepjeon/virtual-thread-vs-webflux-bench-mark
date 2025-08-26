@@ -1,10 +1,18 @@
-application.name: yosep-reactive-boiler-plate-kotlin-server
+application.name: webflux-server
 
 server:
   shutdown: graceful
   port: 20002
   logging:
     access: true
+
+logging:
+  level:
+    io.r2dbc.pool: DEBUG
+    org.springframework.r2dbc: DEBUG
+    org.springframework.web: ERROR
+    org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerMapping: TRACE
+
 
 spring:
   flyway:
@@ -22,6 +30,17 @@ spring:
     url: r2dbc:mysql://localhost:3306/virtual-thread-vs-webflux-benchmark?useUnicode=true&characterEncoding=utf8&autoreconnect=true
     username: myuser
     password: secret
+    pool:
+      enabled: true
+      initial-size: 64
+      max-size: 64             # ✨ 동일 N
+      max-acquire-time: 60s       # HikariCP의 connection-timeout과 유사하게 조정
+      max-idle-time: 540s        # HikariCP의 max-lifetime과 유사하게 조정
+
+  sql:
+    init:
+      schema-locations: classpath:db/migration/V1__init.sql
+      mode: always
   kafka:
     bootstrap-servers: "localhost:9092"
     producer:
@@ -60,11 +79,9 @@ kafka:
       test-1: yosep-mvc-server-test-1
 
 webclient:
-  connection:
-    timeout: 90000
-  response:
-    timeout: 90000
-  read:
-    timeout: 90000
-  write:
-    timeout: 90000
+  external:
+    connection-timeout: 60000
+    response-timeout: 60000
+    read-timeout: 60000
+    write-timeout: 60000
+    byte-cnt: 2097152  # 2 * 1024 * 1024

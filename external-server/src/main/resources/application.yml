@@ -1,0 +1,16 @@
+application.name: external-server
+
+server:
+  shutdown: graceful
+  port: 20003
+  logging:
+    access: true
+
+logging:
+  level:
+    io.r2dbc.pool: DEBUG
+    org.springframework.r2dbc: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerMapping: TRACE
+
+

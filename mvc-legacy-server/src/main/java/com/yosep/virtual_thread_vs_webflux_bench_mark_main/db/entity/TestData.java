@@ -26,11 +26,6 @@ public class TestData {
         this.value1 = value1;
     }
 
-    public TestData(Long id, String name, Integer value1) {
-        this.name = name;
-        this.value1 = value1;
-    }
-
     public Long getId() {
         return id;
     }

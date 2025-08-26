@@ -4,21 +4,15 @@ server:
   shutdown: graceful
   port: 20001
   tomcat:
-    virtual-threads:
-      enabled: false     # ✨ Spring Boot 3.5.x에서 Tomcat VT 활성화
     accept-count: 100000
     max-connections: 10000
 
-#logging:
-#  level:
-#    org.springframework.web: ERROR
-
 spring:
-  main:
-    web-application-type: servlet
   threads:
     virtual:
       enabled: false
+  main:
+    web-application-type: servlet
   flyway:
     enabled: true
     # 마이그레이션 스크립트 위치 (기본값과 동일하지만 명시)

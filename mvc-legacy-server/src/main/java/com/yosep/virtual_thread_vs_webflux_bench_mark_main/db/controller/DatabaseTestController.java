@@ -2,29 +2,25 @@ package com.yosep.virtual_thread_vs_webflux_bench_mark_main.db.controller;
 
 import com.yosep.virtual_thread_vs_webflux_bench_mark_main.db.entity.TestData;
 import com.yosep.virtual_thread_vs_webflux_bench_mark_main.db.repository.TestDataRepository;
-import com.yosep.virtual_thread_vs_webflux_bench_mark_main.db.repository.TestDataRepositoryCustom;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/db")
 public class DatabaseTestController {
 
     private final TestDataRepository testDataRepository;
-    private final TestDataRepositoryCustom testDataRepositoryCustom;
 
-    public DatabaseTestController(TestDataRepository testDataRepository, TestDataRepositoryCustom testDataRepositoryCustom) {
+    public DatabaseTestController(TestDataRepository testDataRepository) {
         this.testDataRepository = testDataRepository;
-        this.testDataRepositoryCustom = testDataRepositoryCustom;
     }
 
     @Transactional
     @PostMapping("/insert-test")
     public String testDatabase() {
-        testDataRepository.save(new TestData("Test Name", 0));
+//        testDataRepository.save(new TestData("Test Name", 0));
+        testDataRepository.saveWithDelay("Test Name", 0, 5);
 
         return "Database test successful!";
     }
@@ -33,24 +29,11 @@ public class DatabaseTestController {
     public ResponseEntity getTestData(
             @PathVariable("id") Long id
     ) {
-        return testDataRepository.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+//        return testDataRepository.findById(id)
+//                .map(ResponseEntity::ok)
+//                .orElse(ResponseEntity.notFound().build());
 
-    @Transactional
-    @PostMapping("/insert-delay-test")
-    public String insertDelayDatabase() {
-        testDataRepositoryCustom.saveWithDelay("Test Name", 0, 5);
-
-        return "Database test successful!";
-    }
-
-    @GetMapping("/get-delay-test/{id}")
-    public ResponseEntity getDelayTestData(
-            @PathVariable("id") Long id
-    ) {
-        return Optional.of(testDataRepositoryCustom.findWithDelay(id, 5))
+        return testDataRepository.findWithDelay(id, 5)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
